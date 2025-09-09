@@ -18,10 +18,15 @@ const pronounceWord = (word) => {
 }
 
 const loadLessons = async() => {
-    const url = "https://openapi.programming-hero.com/api/levels/all";
-    const res = await fetch(url);
-    const json = await res.json();
-    displayLessons(json.data);
+    try{
+        const url = "https://openapi.programming-hero.com/api/levels/all";
+        const res = await fetch(url);
+        const json = await res.json();
+        displayLessons(json.data);
+    }
+    catch(error){
+        alert("Failed to load lessons");
+    }
 }
 
 const displayLessons = (lessons) => {
@@ -40,13 +45,18 @@ const removeActive = () => {
 
 const loadLevelWord = async(id) => {
     manageSpinner(true);
-    const url = `https://openapi.programming-hero.com/api/level/${id}`;
-    const res = await fetch(url);
-    const json = await res.json();
-    removeActive();
-    const clickedBtn = document.getElementById(`lesson-btn-${id}`);
-    clickedBtn.classList.remove("btn-outline");
-    displayLevelWord(json.data);
+    try {
+        const url = `https://openapi.programming-hero.com/api/level/${id}`;
+        const res = await fetch(url);
+        const json = await res.json();
+        removeActive();
+        const clickedBtn = document.getElementById(`lesson-btn-${id}`);
+        clickedBtn.classList.remove("btn-outline");
+        displayLevelWord(json.data);
+    }
+    catch(error){
+        alert("Failed to load words by level");
+    }
 }
 
 const displayLevelWord = (words) => {
@@ -121,13 +131,18 @@ loadLessons();
 
 const searchBtn = document.getElementById("btn-search");
 searchBtn.addEventListener("click", async() => {
-    removeActive();
-    const input = document.getElementById("input-search");
-    const searchValue = input.value.trim().toLowerCase();
-    const url = "https://openapi.programming-hero.com/api/words/all";
-    const res = await fetch(url);
-    const json = await res.json();
-    const allWords = json.data;
-    const filteredWords = allWords.filter(word => word.word.toLowerCase().includes(searchValue));
-    displayLevelWord(filteredWords);
+    try{
+        removeActive();
+        const input = document.getElementById("input-search");
+        const searchValue = input.value.trim().toLowerCase();
+        const url = "https://openapi.programming-hero.com/api/words/all";
+        const res = await fetch(url);
+        const json = await res.json();
+        const allWords = json.data;
+        const filteredWords = allWords.filter(word => word.word.toLowerCase().includes(searchValue));
+        displayLevelWord(filteredWords);
+    }
+    catch(error){
+        alert("Failed to search words");
+    }
 });
